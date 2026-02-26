@@ -35,4 +35,35 @@ def process_query(choice, query):
     chain = LLMChain(llm=llm, prompt=prompt)
     result = chain.run(context=context, query=query)
     
-    return result, docs
+    # Check for suggested fixes
+    fix_info = parse_fix(result)
+    
+    return result, docs, fix_info
+
+def parse_fix(text):
+    """
+    Parses the LLM output for a suggested file fix.
+    Looks for:
+    FILE: /path/to/file
+    ```python
+    content
+    ```
+    """
+    import re
+    # Match FILE: path followed by a python code block
+    pattern = r"FILE:\s*(.*?)\n```python\n(.*?)\n```"
+    match = re.search(pattern, text, re.DOTALL)
+    if match:
+        file_path = match.group(1).strip()
+        new_content = match.group(2)
+        return {"file_path": file_path, "new_content": new_content}
+    return None
+
+def apply_fix(file_path, new_content):
+    """Writes the new content to the specified file."""
+    try:
+        with open(file_path, 'w') as f:
+            f.write(new_content)
+        return True, f"Successfully updated {file_path}"
+    except Exception as e:
+        return False, str(e)

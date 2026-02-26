@@ -1,4 +1,6 @@
 from logic import process_query
+from dotenv import load_dotenv
+load_dotenv()
 
 def main():
     print("\nAI Code Coach")
@@ -9,7 +11,7 @@ def main():
     choice = input("Choose (1/2/3): ").strip()
     query = input("Describe your problem: ")
 
-    result, docs = process_query(choice, query)
+    result, docs, fix_info = process_query(choice, query)
 
     print("\n--- AI Response ---\n")
     print(result)

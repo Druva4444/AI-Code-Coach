@@ -1,15 +1,15 @@
 # AI Code Coach
 
-AI Code Coach is a Retrieval-Augmented Generation (RAG) based tool designed to help developers debug, translate, and understand their codebase. It indexes your local Python files and uses a Large Language Model (LLM) to provide context-aware suggestions and explanations.
+AI Code Coach is a Retrieval-Augmented Generation (RAG) based tool designed to help developers debug, translate, and understand their codebase. This release introduces **Semantic Intelligence** and **One-Click Fixes** for a more powerful developer experience.
 
 ## 🚀 Features
 
 - **Interactive Web UI**: Modern chat-based interface built with Streamlit.
-- **Debug Code**: Identify root causes and suggest fixes for issues in your codebase.
-- **Translate Code**: Translate code snippets into different programming languages or paradigms.
-- **Explain Algorithm**: Get clear explanations of the logic and design patterns used in your code.
+- **One-Click Fix 🛠️**: Automatically apply AI-suggested code fixes directly to your files with a diff preview.
+- **Semantic Intelligence 🧠**: Uses syntax-aware splitting (Python AST) to ensure code chunks are logically complete.
+- **Debug & Explain**: Get clear, context-aware explanations and root-cause analysis.
 - **Local Indexing**: Rapidly searches your codebase using FAISS and HuggingFace embeddings.
-- **Context Awareness**: Automatically includes relevant file metadata and source context.
+- **Advanced Context**: Automatically includes file metadata and structured headers for better LLM performance.
 
 ## 🛠️ Prerequisites
 
@@ -38,7 +38,7 @@ AI Code Coach is a Retrieval-Augmented Generation (RAG) based tool designed to h
 ## 📖 Usage
 
 ### 1. Index your Codebase
-Place the code you want to analyze in the `codebase/` directory. Then, run the ingestion script to build the vector index:
+Place the code you want to analyze in the `codebase/` directory. Then, run the ingestion script to build the semantic vector index:
 ```bash
 python3 ingest.py
 ```
@@ -48,7 +48,7 @@ Start the interactive Streamlit application:
 ```bash
 streamlit run streamlit_app.py
 ```
-This will open a browser window where you can choose a task and chat with the AI about your code.
+Use the **"Apply Fix"** button in the UI to automatically correct bugs or refactor code.
 
 ### 3. Run the CLI Version (Optional)
 Alternatively, you can use the command-line tool:
@@ -58,14 +58,13 @@ python3 app.py
 
 ## 📁 Project Structure
 
-- `streamlit_app.py`: Main entry point for the Web application.
+- `streamlit_app.py`: Main entry point for the Web application (with One-Click Fix UI).
 - `app.py`: CLI entry point for the application.
-- `logic.py`: Shared core logic for query processing and RAG execution.
-- `ingest.py`: Script to build the FAISS vector index from the `codebase/` directory.
+- `logic.py`: Shared core logic for query processing, RAG, and fix application.
+- `ingest.py`: Script to build the semantic FAISS index using Python-specific splitting.
 - `retriever.py`: Handles loading the vector index and retrieving relevant code snippets.
-- `llm.py`: Configuration for the Groq LLM (using `llama-3.1-8b-instant`).
-- `prompts.py`: Logic for different AI task prompt templates.
-- `config.py`: Centralized configuration for directory paths and API keys.
+- `llm.py`: Configuration for the Groq LLM (optimized for structured fixes).
+- `prompts.py`: Task prompt templates including fix formatting instructions.
 - `codebase/`: Put the source files you want the AI to "read" here.
 - `vector_index/`: Stores the generated FAISS index files.
 

@@ -1,5 +1,7 @@
 import os
 from langchain.document_loaders import DirectoryLoader, TextLoader
+from dotenv import load_dotenv
+load_dotenv()
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.vectorstores import FAISS
