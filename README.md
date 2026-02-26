@@ -18,8 +18,8 @@ AI Code Coach is a Retrieval-Augmented Generation (RAG) based tool designed to h
 
 1. **Clone the repository**:
    ```bash
-   git clone <repository-url>
-   cd AI_code_helper
+   git clone https://github.com/Druva4444/AI-Code-Coach.git
+   cd AI-Code-Coach
    ```
 
 2. **Install dependencies**:
