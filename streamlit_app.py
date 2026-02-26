@@ -1,18 +1,17 @@
 import streamlit as st
-from logic import process_query, apply_fix
+from logic import process_query
 import os
 from dotenv import load_dotenv
-import difflib
 
-# Load environment variables (for GROQ_API_KEY)
+# Load environment variables
 load_dotenv()
 
 st.set_page_config(page_title="AI Code Coach", page_icon="🤖", layout="wide")
 
 st.title("🤖 AI Code Coach")
-st.markdown("Your RAG-powered assistant with **One-Click Fix**.")
+st.markdown("RAG-powered assistant for debugging, translating, and explaining your code.")
 
-# Sidebar for configuration/info
+# Sidebar
 with st.sidebar:
     st.header("Settings")
     task_type = st.radio(
@@ -20,11 +19,13 @@ with st.sidebar:
         ["Debug Code", "Translate Code", "Explain Algorithm"],
         index=0
     )
-    
-    st.divider()
-    if st.button("Clear Chat"):
+    if st.button("Clear History"):
         st.session_state.messages = []
         st.rerun()
+
+# State Management
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
 # Mapping task names to choice strings
 task_map = {
@@ -33,18 +34,10 @@ task_map = {
     "Explain Algorithm": "3"
 }
 
-# Chat history initialization
-if "messages" not in st.session_state:
-    st.session_state.messages = []
-
 # Display chat history
-for i, message in enumerate(st.session_state.messages):
+for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
-        
-        # If this message was an assistant response with a fix, we don't re-render the apply button 
-        # for old messages to avoid confusion, but we could if we wanted to.
-        # For simplicity, we only show 'Apply' on the latest response.
 
 # User input
 if prompt := st.chat_input("Ask about your code..."):
@@ -53,50 +46,15 @@ if prompt := st.chat_input("Ask about your code..."):
         st.markdown(prompt)
 
     with st.chat_message("assistant"):
-        with st.spinner("Thinking..."):
+        with st.spinner("Processing..."):
             choice = task_map[task_type]
-            result, docs, fix_info = process_query(choice, prompt)
-            
+            # We still call the same logic but ignore the fix_info return
+            result, docs, _ = process_query(choice, prompt)
             st.markdown(result)
             
-            # One-Click Fix UI
-            if fix_info:
-                st.info(f"💡 AI suggested a fix for `{fix_info['file_path']}`")
-                
-                # Show Diff
-                if os.path.exists(fix_info["file_path"]):
-                    with open(fix_info["file_path"], 'r') as f:
-                        old_content = f.read()
-                    
-                    diff = difflib.unified_diff(
-                        old_content.splitlines(),
-                        fix_info["new_content"].splitlines(),
-                        fromfile="original",
-                        tofile="fixed",
-                        lineterm=""
-                    )
-                    diff_text = "\n".join(list(diff))
-                    
-                    if diff_text:
-                        with st.expander("🔍 View Proposed Changes"):
-                            st.code(diff_text, language='diff')
-                        
-                        if st.button("Apply Fix", key=f"apply_{len(st.session_state.messages)}"):
-                            success, msg = apply_fix(fix_info["file_path"], fix_info["new_content"])
-                            if success:
-                                st.success(msg)
-                            else:
-                                st.error(f"Error applying fix: {msg}")
-                    else:
-                        st.write("Current file already matches the suggested fix.")
-                else:
-                    st.warning(f"File `{fix_info['file_path']}` not found on disk.")
-
-            # Show context sources
-            with st.expander("View Retrieved Context"):
+            with st.expander("View Context Sources"):
                 for doc in docs:
-                    source = doc.metadata.get('source', 'Unknown')
-                    st.caption(f"Source: {source}")
+                    st.caption(f"Source: {doc.metadata.get('source', 'Unknown')}")
                     st.code(doc.page_content, language='python')
 
     st.session_state.messages.append({"role": "assistant", "content": result})

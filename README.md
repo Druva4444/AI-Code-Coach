@@ -1,6 +1,6 @@
 # AI Code Coach
 
-AI Code Coach is a Retrieval-Augmented Generation (RAG) based tool designed to help developers debug, translate, and understand their codebase. This release introduces **Semantic Intelligence** and **One-Click Fixes** for a more powerful developer experience.
+AI Code Coach is a Retrieval-Augmented Generation (RAG) based tool designed to help developers debug, translate, and understand their codebase. This release introduces **Semantic Intelligence** for a more powerful developer experience.
 
 ## 🚀 Features
 
@@ -48,7 +48,7 @@ Start the interactive Streamlit application:
 ```bash
 streamlit run streamlit_app.py
 ```
-Use the **"Apply Fix"** button in the UI to automatically correct bugs or refactor code.
+This will open a browser window where you can choose a task and chat with the AI about your code.
 
 ### 3. Run the CLI Version (Optional)
 Alternatively, you can use the command-line tool:
@@ -58,7 +58,7 @@ python3 app.py
 
 ## 📁 Project Structure
 
-- `streamlit_app.py`: Main entry point for the Web application (with One-Click Fix UI).
+- `streamlit_app.py`: Main entry point for the Web application.
 - `app.py`: CLI entry point for the application.
 - `logic.py`: Shared core logic for query processing, RAG, and fix application.
 - `ingest.py`: Script to build the semantic FAISS index using Python-specific splitting.

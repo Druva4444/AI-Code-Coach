@@ -44,19 +44,35 @@ def parse_fix(text):
     """
     Parses the LLM output for a suggested file fix.
     Looks for:
-    FILE: /path/to/file
+    FILE: <path>
     ```python
     content
     ```
     """
     import re
-    # Match FILE: path followed by a python code block
-    pattern = r"FILE:\s*(.*?)\n```python\n(.*?)\n```"
+    import os
+    from config import BASE_DIR
+    
+    # Flexible pattern for FILE: followed by a code block
+    pattern = r"(?i)FILE:\s*(.*?)\s*\n+```python\n(.*?)\n```"
     match = re.search(pattern, text, re.DOTALL)
+    
     if match:
-        file_path = match.group(1).strip()
+        path = match.group(1).strip()
         new_content = match.group(2)
-        return {"file_path": file_path, "new_content": new_content}
+        
+        # Resolve path if relative
+        if not os.path.isabs(path):
+            abs_path = os.path.join(BASE_DIR, path)
+            if os.path.exists(abs_path):
+                path = abs_path
+            else:
+                # Try relative to codebase
+                cb_path = os.path.join(BASE_DIR, "codebase", path)
+                if os.path.exists(cb_path):
+                    path = cb_path
+                    
+        return {"file_path": path, "new_content": new_content}
     return None
 
 def apply_fix(file_path, new_content):
