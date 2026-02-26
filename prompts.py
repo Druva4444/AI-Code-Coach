@@ -12,14 +12,6 @@ Relevant code from repository:
 {context}
 
 Debug the problem. Identify root cause and suggest fixes.
-
-If you suggest a code fix, provide the COMPLETE updated content for the file.
-Use the following format for the fix:
-FILE: <absolute_path_to_file>
-```python
-# Complete file content here...
-```
-Only provide one such block per response if possible.
 """
 )
 

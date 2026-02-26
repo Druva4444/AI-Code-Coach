@@ -5,7 +5,6 @@ AI Code Coach is a Retrieval-Augmented Generation (RAG) based tool designed to h
 ## 🚀 Features
 
 - **Interactive Web UI**: Modern chat-based interface built with Streamlit.
-- **One-Click Fix 🛠️**: Automatically apply AI-suggested code fixes directly to your files with a diff preview.
 - **Semantic Intelligence 🧠**: Uses syntax-aware splitting (Python AST) to ensure code chunks are logically complete.
 - **Debug & Explain**: Get clear, context-aware explanations and root-cause analysis.
 - **Local Indexing**: Rapidly searches your codebase using FAISS and HuggingFace embeddings.
@@ -60,11 +59,11 @@ python3 app.py
 
 - `streamlit_app.py`: Main entry point for the Web application.
 - `app.py`: CLI entry point for the application.
-- `logic.py`: Shared core logic for query processing, RAG, and fix application.
+- `logic.py`: Shared core logic for query processing and RAG execution.
 - `ingest.py`: Script to build the semantic FAISS index using Python-specific splitting.
 - `retriever.py`: Handles loading the vector index and retrieving relevant code snippets.
-- `llm.py`: Configuration for the Groq LLM (optimized for structured fixes).
-- `prompts.py`: Task prompt templates including fix formatting instructions.
+- `llm.py`: Configuration for the Groq LLM.
+- `prompts.py`: Task prompt templates for debugging, translation, and explanations.
 - `codebase/`: Put the source files you want the AI to "read" here.
 - `vector_index/`: Stores the generated FAISS index files.
 
