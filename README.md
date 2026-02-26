@@ -4,10 +4,12 @@ AI Code Coach is a Retrieval-Augmented Generation (RAG) based tool designed to h
 
 ## 🚀 Features
 
+- **Interactive Web UI**: Modern chat-based interface built with Streamlit.
 - **Debug Code**: Identify root causes and suggest fixes for issues in your codebase.
 - **Translate Code**: Translate code snippets into different programming languages or paradigms.
 - **Explain Algorithm**: Get clear explanations of the logic and design patterns used in your code.
 - **Local Indexing**: Rapidly searches your codebase using FAISS and HuggingFace embeddings.
+- **Context Awareness**: Automatically includes relevant file metadata and source context.
 
 ## 🛠️ Prerequisites
 
@@ -28,9 +30,9 @@ AI Code Coach is a Retrieval-Augmented Generation (RAG) based tool designed to h
    ```
 
 3. **Set up environment variables**:
-   Create a `.env` file or export your Groq API key:
-   ```bash
-   export GROQ_API_KEY="your_groq_api_key_here"
+   Create a `.env` file in the root directory:
+   ```env
+   GROQ_API_KEY="your_groq_api_key_here"
    ```
 
 ## 📖 Usage
@@ -41,16 +43,24 @@ Place the code you want to analyze in the `codebase/` directory. Then, run the i
 python3 ingest.py
 ```
 
-### 2. Run the AI Code Coach
-Start the interactive CLI tool:
+### 2. Run the Web Interface (Recommended)
+Start the interactive Streamlit application:
+```bash
+streamlit run streamlit_app.py
+```
+This will open a browser window where you can choose a task and chat with the AI about your code.
+
+### 3. Run the CLI Version (Optional)
+Alternatively, you can use the command-line tool:
 ```bash
 python3 app.py
 ```
-Follow the on-screen prompts to choose a task (Debug, Translate, or Explain) and describe your problem.
 
 ## 📁 Project Structure
 
-- `app.py`: Main entry point for the CLI application.
+- `streamlit_app.py`: Main entry point for the Web application.
+- `app.py`: CLI entry point for the application.
+- `logic.py`: Shared core logic for query processing and RAG execution.
 - `ingest.py`: Script to build the FAISS vector index from the `codebase/` directory.
 - `retriever.py`: Handles loading the vector index and retrieving relevant code snippets.
 - `llm.py`: Configuration for the Groq LLM (using `llama-3.1-8b-instant`).
@@ -62,6 +72,7 @@ Follow the on-screen prompts to choose a task (Debug, Translate, or Explain) and
 ## 🧰 Technologies Used
 
 - [LangChain](https://github.com/langchain-ai/langchain): Framework for building LLM applications.
+- [Streamlit](https://streamlit.io/): Framework for building interactive web apps.
 - [FAISS](https://github.com/facebookresearch/faiss): Efficient similarity search and clustering of dense vectors.
 - [Groq](https://groq.com/): High-performance LLM inference.
 - [HuggingFace Embeddings](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2): For generating code vector representations.
