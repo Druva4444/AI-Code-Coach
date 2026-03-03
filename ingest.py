@@ -17,7 +17,9 @@ def build_index():
 
     documents = loader.load()
 
-    splitter = RecursiveCharacterTextSplitter(
+    from langchain.text_splitter import Language
+    splitter = RecursiveCharacterTextSplitter.from_language(
+        language=Language.PYTHON,
         chunk_size=1000,
         chunk_overlap=200
     )
